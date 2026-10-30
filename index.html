@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111410">
+  <meta name="description" content="前线 1985：一款免费的 HTML5 坦克大战。驾驶坦克，击退三波敌军，守住最后的基地。支持键盘和触屏，无需下载。">
+  <title>前线 1985 · 坦克大战</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="game.js" defer></script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-tank" viewBox="0 0 32 32"><path d="M4 7h6v22H4zM22 7h6v22h-6zM11 9h10v17H11zM14 2h4v16h-4z" fill="currentColor"/><path d="M3 11h8M3 17h8M3 23h8M21 11h8M21 17h8M21 23h8" stroke="#111410" stroke-width="2"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="m11 5-6 4H2v6h3l6 4V5ZM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="3"/></symbol>
+    <symbol id="i-restart" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m8 12 3 3 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
+  </defs></svg>
+
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="前线 1985 首页"><span class="brand-mark"><svg><use href="#i-tank"/></svg></span><span>FRONTLINE<span class="brand-year">1985</span></span></a>
+      <div class="header-center"><span class="status-dot"></span>浏览器街机计划 <span class="tiny-divider">/</span> NO. 001</div>
+      <button class="text-button" id="help-button"><span class="help-icon">?</span> 操作指南</button>
+    </header>
+
+    <main>
+      <section class="heading-row" aria-labelledby="page-title">
+        <div><div class="eyebrow"><span></span> THE LAST LINE OF DEFENSE</div><h1 id="page-title">坦克大战<span class="title-period">.</span></h1><p class="subtitle">一辆坦克，一座基地。守住你的最后一道防线。</p></div>
+        <div class="edition-stamp"><span>EST. 1985</span><strong>经典，从未退役。</strong><span>REBUILT FOR THE BROWSER</span></div>
+      </section>
+
+      <div class="game-layout">
+        <aside class="left-panel">
+          <section class="briefing"><div class="section-label">01 <span>作战简报</span></div><h2>守住基地。<br><span>全员出击。</span></h2><p>敌军正向你的指挥部逼近。穿过废墟、击碎掩体，在最后一发炮弹前扭转战局。</p><div class="mission-tag"><svg><use href="#i-shield"/></svg> 基地存活即是希望</div></section>
+          <section class="controls-info"><div class="section-label">02 <span>驾驶手册</span></div><div class="control-row"><div class="wasd"><kbd>W</kbd><div><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div></div><div><strong>移动坦克</strong><small>或使用方向键</small></div></div><div class="control-row"><kbd class="space-key">SPACE</kbd><div><strong>发射炮弹</strong><small>长按持续射击</small></div></div><div class="small-controls"><span><kbd>P</kbd> 暂停</span><span><kbd>M</kbd> 音效</span></div></section>
+          <div class="field-note"><span>FIELD NOTE / 001</span><p>砖墙可以击碎，钢墙可以挡弹。<br>善用掩体，但别忘了身后的基地。</p></div>
+        </aside>
+
+        <section class="arena-section" aria-label="坦克大战游戏区">
+          <div class="arena-topbar"><div><span class="status-dot" id="arena-dot"></span><span id="arena-status">等待部署</span></div><span class="arena-coordinates">SECTOR 07 <span>·</span> 24 × 20</span></div>
+          <div class="battlefield" id="battlefield">
+            <canvas id="game-canvas" width="720" height="600" tabindex="0" aria-label="坦克大战战场。WASD 或方向键移动，空格射击，P 暂停。">你的浏览器不支持 Canvas，请使用较新的浏览器。</canvas>
+            <div class="game-overlay" id="game-overlay">
+              <div class="overlay-corners"></div><div class="overlay-emblem"><svg><use href="#i-tank"/></svg></div>
+              <p class="overlay-eyebrow" id="overlay-eyebrow">YOUR BASE. YOUR BATTLE.</p>
+              <h2 id="overlay-title">准备好，上前线。</h2>
+              <p id="overlay-description">击退三波敌军，守护你的指挥部。</p>
+              <button id="start-button" class="primary-button"><span id="start-label">开始作战</span><svg><use href="#i-arrow"/></svg></button>
+              <span class="overlay-hint" id="overlay-hint">按 ENTER 出击 · 无需下载，即刻开战</span>
+            </div>
+            <div id="powerup-status" class="powerup-status" hidden></div>
+          </div>
+          <div class="arena-toolbar"><div class="live-label"><span class="mini-crosshair">⌖</span><span id="toolbar-label">单人战役</span><span class="toolbar-separator">/</span><span>3 波防守</span></div><div class="toolbar-buttons"><button id="sound-button" class="icon-button" aria-label="关闭音效" title="音效 (M)" aria-pressed="false"><svg><use href="#i-sound"/></svg></button><button id="pause-button" class="icon-button" aria-label="暂停游戏" title="暂停 (P)" disabled><svg><use href="#i-pause"/></svg></button><span class="toolbar-rule"></span><button id="restart-button" class="icon-button" aria-label="重新开始" title="重新开始" disabled><svg><use href="#i-restart"/></svg></button><button id="fullscreen-button" class="icon-button" aria-label="全屏战场" title="全屏战场"><svg><use href="#i-expand"/></svg></button></div></div>
+          <div class="touch-controls" aria-label="触屏控制"><div class="dpad"><button data-action="up" aria-label="向上">▲</button><button data-action="left" aria-label="向左">◀</button><button data-action="down" aria-label="向下">▼</button><button data-action="right" aria-label="向右">▶</button></div><span>守住最后一道防线</span><button class="fire-button" data-action="fire" aria-label="射击">FIRE<br><small>射击</small></button></div>
+        </section>
+
+        <aside class="right-panel"><section class="score-panel"><div class="section-label">实时战况 <span class="live-indicator">LIVE</span></div><div class="score-label">本局得分</div><div id="score" class="score-value">00000</div><div class="best-score"><span>个人最佳</span><strong id="high-score">00000</strong></div></section>
+          <section class="battle-stats"><div class="stat-row"><span>装甲储备</span><div class="lives" id="lives" aria-label="3 条生命"><svg><use href="#i-tank"/></svg><svg><use href="#i-tank"/></svg><svg><use href="#i-tank"/></svg></div></div><div class="stat-row wave-stat"><span>当前波次</span><strong><span id="wave">01</span><em> / 03</em></strong></div><div class="wave-track" id="wave-track"><span class="active"></span><span></span><span></span></div><div class="stat-row enemy-stat"><span>剩余敌军</span><strong id="enemies">08</strong></div><div class="enemy-grid" id="enemy-grid" aria-hidden="true"></div><div class="stat-row kills-stat"><span>累计击毁</span><strong id="kills">00</strong></div></section>
+          <section class="terrain-guide"><div class="section-label">战场识别</div><div class="legend-row"><span class="terrain brick"></span><span>砖墙</span><small>可摧毁</small></div><div class="legend-row"><span class="terrain steel"></span><span>钢墙</span><small>不可摧毁</small></div><div class="legend-row"><span class="terrain bush"></span><span>丛林</span><small>隐蔽穿行</small></div><div class="legend-row"><span class="terrain water"></span><span>水域</span><small>禁止通行</small></div></section>
+          <section class="battle-log"><div class="section-label">战地电台 <span class="radio-icon">▥</span></div><ol id="event-log" aria-live="polite"><li><span>HQ</span> 指挥部已就绪，等待出击。</li></ol></section>
+        </aside>
+      </div>
+      <footer class="site-footer"><span><span class="status-dot"></span> BUILT FOR THE GOOD OLD DAYS.</span><span>HTML5 CANVAS <span class="tiny-divider">/</span> 纯粹的街机乐趣</span><a href="https://github.com/2234362870a-sketch/git-test" target="_blank" rel="noopener noreferrer" id="source-link" aria-label="在 GitHub 查看源代码">OPEN SOURCE <svg><use href="#i-arrow"/></svg></a></footer>
+    </main>
+  </div>
+
+  <dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-top"><span class="section-label">FIELD MANUAL</span><button class="icon-button close-dialog" aria-label="关闭操作指南">✕</button></div><h2 id="help-title">出击前，记住这几件事。</h2><p><kbd>W A S D</kbd> 或 <kbd>↑ ← ↓ →</kbd> 驾驶坦克，<kbd>空格</kbd> 长按射击。手机上使用战场下方的方向键和射击键。</p><p>击退全部三波敌军即可获胜。你的坦克被击中会消耗一条生命；基地被摧毁或生命耗尽，战役结束。出生时有短暂护盾。</p><p>砖墙可以击碎，钢墙不可摧毁，水域不可驶入，丛林可以穿行。击毁敌军后可能掉落维修、护盾或速射道具，驾驶坦克拾取即可生效。</p><p><kbd>P</kbd> 暂停 / 继续 · <kbd>M</kbd> 开关音效。切换到其他窗口时，游戏会自动暂停。最高分保存在当前浏览器。</p><button class="primary-button close-dialog">收到，准备出击 <svg><use href="#i-arrow"/></svg></button></dialog>
+  <noscript><div class="noscript">请启用 JavaScript 来运行坦克大战。</div></noscript>
+</body>
+</html>
