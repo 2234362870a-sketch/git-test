@@ -9,7 +9,7 @@
   const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
   const random = (a, b) => a + Math.random() * (b - a);
   const overlap = (a, b, padding = 0) => Math.abs(a.x - b.x) < (a.w + b.w) / 2 - padding && Math.abs(a.y - b.y) < (a.h + b.h) / 2 - padding;
-
+//
   class TankGame {
     constructor(canvas, options = {}) {
       this.canvas = canvas;
