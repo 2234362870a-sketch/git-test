@@ -1,8 +1,18 @@
+# Dependencies and local files
 node_modules/
-.DS_Store
-Thumbs.db
 .local/
 *.log
+
+# Local environment configuration; keep the example shareable
 .env
 .env.*
 !.env.example
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+*.swp
+*.swo
+*~
